@@ -1,20 +1,89 @@
-﻿// customClass.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿#include <iostream>
 
-#include <iostream>
+using namespace std;
 
-int main()
-{
-    std::cout << "Hello World!\n";
-}
+class CustomStack {
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
+private:
 
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+	int* stack;
+	int sizeStack;
+	int top = 0;
+
+public:
+
+	CustomStack() {
+		sizeStack = 100;
+		top = 0;
+		stack = new int[sizeStack];
+	};
+
+	void addItemStack(int item) {
+		if (sizeStack != top) {
+
+			stack[top] = item;
+			top++;
+		}
+		else {
+			sizeStack *= 2;
+
+			int* resizeStack = new int[sizeStack];
+
+			for (int i = 0; i < top; i++) {
+				resizeStack[i] = stack[i];
+			};
+
+			resizeStack[top] = item;
+			top++;
+			delete[] stack;
+
+			stack = resizeStack;
+		};
+	};
+
+	int getItemStack() {
+		if (sizeStack != 0) {
+			top--;
+
+			return stack[top];
+		};
+
+		abort();
+	};
+
+	bool checkEmptyStack() {
+		return top == 0;
+	};
+
+	void showStack() {
+		for (int i = top; i > 0; i--) {
+			cout << stack[i - 1] << ' ';
+		};
+	};
+
+	~CustomStack() {
+		delete[] stack;
+	};
+};
+
+int main() {
+	setlocale(LC_ALL, "RUS");
+
+	CustomStack firstStack;
+
+	firstStack.addItemStack(99);
+	firstStack.addItemStack(5);
+	firstStack.addItemStack(4);
+	firstStack.addItemStack(3);
+	firstStack.addItemStack(8);
+
+	firstStack.showStack();
+
+	cout << endl;
+
+	int a = firstStack.getItemStack();
+
+	cout << a << endl;
+
+	firstStack.showStack();
+};
